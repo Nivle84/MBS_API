@@ -16,5 +16,8 @@ namespace MBStest01.Models
         //public int NoteID { get; set; }
         public Note Note { get; set; }
         public DateTime Date { get; set; }
+        public List<Mood> Moods { get; set; }
+        public List<Influence> Influences { get; set; }
+        public List<Note> Notes { get; set; }
     }
 }

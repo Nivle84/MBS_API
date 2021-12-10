@@ -11,6 +11,7 @@ namespace MBS_API
 {
     public class MBSContext : DbContext
     {
+        //https://stackoverflow.com/questions/54596180/asp-net-core-web-api-ef-core-models-with-foreign-key-relationship
         public DbSet<Day> Days { get; set; }
         public DbSet<Influence> Influences { get; set; }
         public DbSet<Mood> Moods { get; set; }
@@ -45,7 +46,27 @@ namespace MBS_API
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //Bliver nødt til at definere unique constraint her med "Fluent API", da det ikke understøttes gennem data annotations i selve modellen.
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.UserEmail)
+                .IsUnique();
 
+            //modelBuilder.Entity<Day>()
+            //    .HasIndex(d => d.Note.NoteID)
+            //    .IsUnique();
+            //modelBuilder.Entity<Day>()
+            //    .HasOne(n => n.Note)
+            //    .WithOne(d => d.Day)
+            //    .HasForeignKey<Note>(n => n.DayID);
+
+            //modelBuilder.Entity<Note>()
+            //    .HasOne(d => d.Day)
+            //    .WithOne(n => n.Note)
+            //    .HasForeignKey<Day>(n => n.Note.NoteID);
+
+            modelBuilder.Entity<Day>()
+                .HasOne<Note>(n => n.Note)
+                .WithOne(d => d.Day);
 
             base.OnModelCreating(modelBuilder);
         }

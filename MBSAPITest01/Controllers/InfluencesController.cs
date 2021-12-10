@@ -83,6 +83,14 @@ namespace MBSAPITest01.Controllers
 
             return CreatedAtAction("GetInfluence", new { id = influence.InfluenceID }, influence);
         }
+        [HttpPost("multiple")]  //Brugt til test
+        public async Task<ActionResult<Influence>> PostInfluence(List<Influence> influences)
+        {
+            _context.Influences.AddRange(influences);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
 
         // DELETE: api/Influences/5
         [HttpDelete("{id}")]

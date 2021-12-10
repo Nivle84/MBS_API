@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MBSAPITest01.Migrations
 {
     [DbContext(typeof(MBSContext))]
-    [Migration("20211104105658_initial")]
-    partial class initial
+    [Migration("20211210070609_changedNoteModel")]
+    partial class changedNoteModel
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -37,9 +37,6 @@ namespace MBSAPITest01.Migrations
                     b.Property<int?>("MoodID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("NoteID")
-                        .HasColumnType("int");
-
                     b.Property<int?>("UserID")
                         .HasColumnType("int");
 
@@ -48,8 +45,6 @@ namespace MBSAPITest01.Migrations
                     b.HasIndex("InfluenceID");
 
                     b.HasIndex("MoodID");
-
-                    b.HasIndex("NoteID");
 
                     b.HasIndex("UserID");
 
@@ -64,6 +59,7 @@ namespace MBSAPITest01.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("InfluenceName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("InfluenceID");
@@ -79,6 +75,7 @@ namespace MBSAPITest01.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("MoodName")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MoodID");
@@ -88,15 +85,14 @@ namespace MBSAPITest01.Migrations
 
             modelBuilder.Entity("MBStest01.Models.Note", b =>
                 {
-                    b.Property<int>("NoteID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<int>("DayID")
+                        .HasColumnType("int");
 
                     b.Property<string>("NoteString")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("NoteID");
+                    b.HasKey("DayID");
 
                     b.ToTable("Notes");
                 });
@@ -109,12 +105,17 @@ namespace MBSAPITest01.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("UserEmail")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("UserPassword")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserID");
+
+                    b.HasIndex("UserEmail")
+                        .IsUnique();
 
                     b.ToTable("Users");
                 });
@@ -129,10 +130,6 @@ namespace MBSAPITest01.Migrations
                         .WithMany()
                         .HasForeignKey("MoodID");
 
-                    b.HasOne("MBStest01.Models.Note", "Note")
-                        .WithMany()
-                        .HasForeignKey("NoteID");
-
                     b.HasOne("MBStest01.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserID");
@@ -141,9 +138,23 @@ namespace MBSAPITest01.Migrations
 
                     b.Navigation("Mood");
 
-                    b.Navigation("Note");
-
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("MBStest01.Models.Note", b =>
+                {
+                    b.HasOne("MBStest01.Models.Day", "Day")
+                        .WithOne("Note")
+                        .HasForeignKey("MBStest01.Models.Note", "DayID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Day");
+                });
+
+            modelBuilder.Entity("MBStest01.Models.Day", b =>
+                {
+                    b.Navigation("Note");
                 });
 #pragma warning restore 612, 618
         }

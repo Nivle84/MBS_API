@@ -9,7 +9,9 @@ namespace API_Tester
     {
         static void Main(string[] args)
         {
-            MyTesterClass.AddUser();
+            //MyTesterClass.AddUser();
+
+
         }
     }
 
@@ -22,6 +24,19 @@ namespace API_Tester
         //    UserEmail = "min@mail.dk",
         //    UserPassword = "kodeord"
         //};
+
+  //      public static void AddDay()
+		//{
+
+		//	Day thisDay = new Day()
+		//	{
+  //              Date = DateTime.Now,
+  //              Influence = _context.Influences.FindAsync()
+		//	};
+
+
+		//_context.Add(thisDay);
+		//}
         
         public static void AddUser()
         {

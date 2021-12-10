@@ -47,7 +47,7 @@ namespace MBSAPITest01.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutNote(int id, Note note)
         {
-            if (id != note.NoteID)
+            if (id != note.DayID)
             {
                 return BadRequest();
             }
@@ -81,7 +81,7 @@ namespace MBSAPITest01.Controllers
             _context.Notes.Add(note);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetNote", new { id = note.NoteID }, note);
+            return CreatedAtAction("GetNote", new { id = note.DayID }, note);
         }
 
         // DELETE: api/Notes/5
@@ -102,7 +102,7 @@ namespace MBSAPITest01.Controllers
 
         private bool NoteExists(int id)
         {
-            return _context.Notes.Any(e => e.NoteID == id);
+            return _context.Notes.Any(e => e.DayID == id);
         }
     }
 }

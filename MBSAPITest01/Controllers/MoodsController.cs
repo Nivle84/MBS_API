@@ -83,6 +83,14 @@ namespace MBSAPITest01.Controllers
 
             return CreatedAtAction("GetMood", new { id = mood.MoodID }, mood);
         }
+        [HttpPost("multiple")]
+        public async Task<ActionResult<Mood>> PostMood(List<Mood> moods)
+        {
+            _context.Moods.AddRange(moods);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+        }
 
         // DELETE: api/Moods/5
         [HttpDelete("{id}")]

@@ -42,6 +42,22 @@ namespace MBSAPITest01.Controllers
             return user;
         }
 
+        [HttpGet("{id}/associateddays")]
+        public async Task<ActionResult<IEnumerable<Day>>> GetDaysByUserID(int id)
+		{
+			var days = await _context.Days
+	            .Include(i => i.Influence)
+                //.Where(user => user.User.UserID == id)
+	            .Include(m => m.Mood)
+	            .Include(n => n.Note)
+                .Where(u => u.User.UserID == id)
+	            //.Include(u => u.User)
+				.ToListAsync();
+
+			return Ok(days);
+		}
+
+
         // PUT: api/Users/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

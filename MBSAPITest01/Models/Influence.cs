@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
 namespace MBStest01.Models
@@ -7,12 +8,13 @@ namespace MBStest01.Models
     public class Influence
     {
         public int InfluenceID { get; set; }
+        [Required]
         public string InfluenceName { get; set; }
         //public InfluenceEnumID InfluenceEnumID { get; set; }
 
         //public InfluenceEnum Influence { get; set; }
-        public int DayID { get; set; }
-        public Day Day { get; set; }
+        //public int DayID { get; set; }
+        //public Day Day { get; set; }
     }
 
     //public enum InfluenceEnum : int

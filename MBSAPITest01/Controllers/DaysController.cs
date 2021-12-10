@@ -42,6 +42,22 @@ namespace MBSAPITest01.Controllers
             return day;
         }
 
+        [HttpGet("withdata")]
+        public async Task<ActionResult> GetUsersDaysWithData(int id)
+		{
+            var day = await _context.Days
+                .Include(i => i.Influence)
+                .Include(m => m.Mood)
+                .Include(n => n.Note)
+                .Include(u => u.User)
+                .ToListAsync();
+                //.FirstOrDefaultAsync(d => d.User.UserID == id);
+                //.ThenInclude(d => d.)
+                //.FirstOrDefaultAsync(d => d.DayID == id);
+
+            return Ok(day);
+		}
+
         // PUT: api/Days/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

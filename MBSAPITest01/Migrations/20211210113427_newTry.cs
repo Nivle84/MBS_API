@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MBSAPITest01.Migrations
 {
-    public partial class changedNoteModel : Migration
+    public partial class newTry : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -66,19 +66,19 @@ namespace MBSAPITest01.Migrations
                         column: x => x.InfluenceID,
                         principalTable: "Influences",
                         principalColumn: "InfluenceID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Days_Moods_MoodID",
                         column: x => x.MoodID,
                         principalTable: "Moods",
                         principalColumn: "MoodID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Days_Users_UserID",
                         column: x => x.UserID,
                         principalTable: "Users",
                         principalColumn: "UserID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -86,7 +86,8 @@ namespace MBSAPITest01.Migrations
                 columns: table => new
                 {
                     DayID = table.Column<int>(type: "int", nullable: false),
-                    NoteString = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    NoteString = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -96,6 +97,12 @@ namespace MBSAPITest01.Migrations
                         column: x => x.DayID,
                         principalTable: "Days",
                         principalColumn: "DayID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Notes_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "UserID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -112,6 +119,11 @@ namespace MBSAPITest01.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Days_UserID",
                 table: "Days",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notes_UserID",
+                table: "Notes",
                 column: "UserID");
 
             migrationBuilder.CreateIndex(

@@ -29,13 +29,13 @@ namespace MBSAPITest01.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("InfluenceID")
+                    b.Property<int>("InfluenceID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MoodID")
+                    b.Property<int>("MoodID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("UserID")
+                    b.Property<int>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("DayID");
@@ -87,10 +87,14 @@ namespace MBSAPITest01.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("NoteString")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
                     b.HasKey("DayID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Notes");
                 });
@@ -122,15 +126,21 @@ namespace MBSAPITest01.Migrations
                 {
                     b.HasOne("MBStest01.Models.Influence", "Influence")
                         .WithMany()
-                        .HasForeignKey("InfluenceID");
+                        .HasForeignKey("InfluenceID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MBStest01.Models.Mood", "Mood")
                         .WithMany()
-                        .HasForeignKey("MoodID");
+                        .HasForeignKey("MoodID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("MBStest01.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID");
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Influence");
 
@@ -144,15 +154,28 @@ namespace MBSAPITest01.Migrations
                     b.HasOne("MBStest01.Models.Day", "Day")
                         .WithOne("Note")
                         .HasForeignKey("MBStest01.Models.Note", "DayID")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("MBStest01.Models.User", "User")
+                        .WithMany("Notes")
+                        .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Day");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MBStest01.Models.Day", b =>
                 {
                     b.Navigation("Note");
+                });
+
+            modelBuilder.Entity("MBStest01.Models.User", b =>
+                {
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

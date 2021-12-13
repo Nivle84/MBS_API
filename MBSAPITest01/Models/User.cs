@@ -12,5 +12,6 @@ namespace MBStest01.Models
         public string UserEmail { get; set; }
         [Required]
         public string UserPassword { get; set; }
-    }
+		public List<Note> Notes { get; set; }
+	}
 }

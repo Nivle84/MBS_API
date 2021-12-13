@@ -33,6 +33,9 @@ namespace MBSAPITest01.Controllers
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
+                //.Include(i => i.Notes)
+                //.Where(u => u.UserID == id)
+                //.FirstOrDefaultAsync();
 
             if (user == null)
             {
@@ -41,8 +44,20 @@ namespace MBSAPITest01.Controllers
 
             return user;
         }
+		[HttpGet("{id}/withnotes")]
+		public async Task<ActionResult<User>> GetUserWithNotes(int id)
+		{
+            //Dette går ikke da de to objekter henviser til hinanden ad infinitum... -_-
+            var user = await _context.Users.FindAsync(id);
+            var notesList = await _context.Notes
+                .Where(u => u.UserID == id)
+                .ToListAsync();
+            user.Notes = notesList;
 
-        [HttpGet("{id}/associateddays")]
+            return Ok(user);
+		}
+
+		[HttpGet("{id}/days")]
         public async Task<ActionResult<IEnumerable<Day>>> GetDaysByUserID(int id)
 		{
 			var days = await _context.Days

@@ -65,10 +65,16 @@ namespace MBS_API
             //    .HasForeignKey<Day>(n => n.Note.NoteID);
 
             modelBuilder.Entity<Day>()
-                .HasOne<Note>(n => n.Note)
-                .WithOne(d => d.Day);
+                .HasOne(n => n.Note)
+                .WithOne(d => d.Day)
+                .OnDelete(DeleteBehavior.ClientCascade);
 
-            base.OnModelCreating(modelBuilder);
+			//modelBuilder.Entity<Note>()
+			//	.HasOne<Day>(d => d.Day)
+   //             .WithOne<Note>(n => n.)
+
+
+			base.OnModelCreating(modelBuilder);
         }
         //modelBuilder.Entity<Day>()
         //        .Property(d => d.MoodName)

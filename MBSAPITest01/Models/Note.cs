@@ -12,10 +12,11 @@ namespace MBStest01.Models
         [Key, ForeignKey("Day")]
 		public int DayID { get; set; }
         [Required]
+		[ForeignKey("User")]
 		public int UserID { get; set; }
         public string NoteString { get; set; }
 		//[Required]
-		public virtual Day Day { get; set; }
-		public virtual User User { get; set; }
+		public Day Day { get; set; }
+		public User User { get; set; }
 	}
 }

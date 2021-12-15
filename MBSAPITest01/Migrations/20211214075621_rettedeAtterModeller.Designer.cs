@@ -4,14 +4,16 @@ using MBS_API;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MBSAPITest01.Migrations
 {
     [DbContext(typeof(MBSContext))]
-    partial class MBSContextModelSnapshot : ModelSnapshot
+    [Migration("20211214075621_rettedeAtterModeller")]
+    partial class rettedeAtterModeller
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,13 +31,10 @@ namespace MBSAPITest01.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("HasNote")
-                        .HasColumnType("bit");
-
                     b.Property<int>("InfluenceID")
                         .HasColumnType("int");
 
-                    b.Property<int>("MoodID")
+                    b.Property<int?>("MoodID")
                         .HasColumnType("int");
 
                     b.Property<int>("UserID")
@@ -92,10 +91,12 @@ namespace MBSAPITest01.Migrations
                     b.Property<string>("NoteString")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int?>("UserID")
+                        .HasColumnType("int");
+
                     b.HasKey("DayID");
 
-                    b.HasIndex("DayID")
-                        .IsUnique();
+                    b.HasIndex("UserID");
 
                     b.ToTable("Notes");
                 });
@@ -126,19 +127,17 @@ namespace MBSAPITest01.Migrations
             modelBuilder.Entity("MBStest01.Models.Day", b =>
                 {
                     b.HasOne("MBStest01.Models.Influence", "Influence")
-                        .WithMany()
+                        .WithMany("Days")
                         .HasForeignKey("InfluenceID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("MBStest01.Models.Mood", "Mood")
                         .WithMany()
-                        .HasForeignKey("MoodID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MoodID");
 
                     b.HasOne("MBStest01.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Days")
                         .HasForeignKey("UserID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -152,16 +151,36 @@ namespace MBSAPITest01.Migrations
 
             modelBuilder.Entity("MBStest01.Models.Note", b =>
                 {
-                    b.HasOne("MBStest01.Models.Day", null)
+                    b.HasOne("MBStest01.Models.Day", "Day")
                         .WithOne("Note")
                         .HasForeignKey("MBStest01.Models.Note", "DayID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("MBStest01.Models.User", "User")
+                        .WithMany("Notes")
+                        .HasForeignKey("UserID");
+
+                    b.Navigation("Day");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("MBStest01.Models.Day", b =>
                 {
                     b.Navigation("Note");
+                });
+
+            modelBuilder.Entity("MBStest01.Models.Influence", b =>
+                {
+                    b.Navigation("Days");
+                });
+
+            modelBuilder.Entity("MBStest01.Models.User", b =>
+                {
+                    b.Navigation("Days");
+
+                    b.Navigation("Notes");
                 });
 #pragma warning restore 612, 618
         }

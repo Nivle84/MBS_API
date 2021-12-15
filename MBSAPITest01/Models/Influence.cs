@@ -10,12 +10,12 @@ namespace MBStest01.Models
         public int InfluenceID { get; set; }
         [Required]
         public string InfluenceName { get; set; }
-        //public InfluenceEnumID InfluenceEnumID { get; set; }
+		//public InfluenceEnumID InfluenceEnumID { get; set; }
 
-        //public InfluenceEnum Influence { get; set; }
-        //public int DayID { get; set; }
-        //public Day Day { get; set; }
-    }
+		//public InfluenceEnum Influence { get; set; }
+		//public int DayID { get; set; }
+		//public Day Day { get; set; }
+	}
 
     //public enum InfluenceEnum : int
     //{

@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MBS_API;
 using MBStest01.Models;
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace MBSAPITest01.Controllers
 {
@@ -15,7 +17,6 @@ namespace MBSAPITest01.Controllers
     public class DaysController : ControllerBase
     {
         private readonly MBSContext _context;
-
         public DaysController(MBSContext context)
         {
             _context = context;
@@ -25,8 +26,8 @@ namespace MBSAPITest01.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Day>>> GetDays()
         {
-            return await _context.Days.ToListAsync();
-        }
+			return await _context.Days.ToListAsync();
+		}
 
         // GET: api/Days/5
         [HttpGet("{id}")]
@@ -43,20 +44,17 @@ namespace MBSAPITest01.Controllers
         }
 
         [HttpGet("withdata")]
-        public async Task<ActionResult> GetUsersDaysWithData(int id)
+        public async Task<ActionResult> GetDaysWithData(int id)
 		{
-            var day = await _context.Days
-                .Include(i => i.Influence)
+            var days = await _context.Days
+                //.Include(u => u.User)
                 .Include(m => m.Mood)
-                .Include(n => n.Note)
-                .Include(u => u.User)
-                .ToListAsync();
-                //.FirstOrDefaultAsync(d => d.User.UserID == id);
-                //.ThenInclude(d => d.)
-                //.FirstOrDefaultAsync(d => d.DayID == id);
+                .Include(i => i.Influence)
+				.Include(n => n.Note)
+				.ToListAsync();
 
-            return Ok(day);
-		}
+            return Ok(days);
+        }
 
         // PUT: api/Days/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -94,10 +92,20 @@ namespace MBSAPITest01.Controllers
         [HttpPost]
         public async Task<ActionResult<Day>> PostDay(Day day)
         {
-            _context.Days.Add(day);
+            Day dayToPost = new Day();
+            dayToPost.Date = day.Date;
+            dayToPost.UserID = day.User.UserID;
+            dayToPost.MoodID = day.Mood.MoodID;
+            dayToPost.InfluenceID = day.Influence.InfluenceID;
+            if (day.Note != null)
+                dayToPost.HasNote = true;
+            dayToPost.Note = day.Note;
+
+            _context.Days.Add(dayToPost);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetDay", new { id = day.DayID }, day);
+            //return CreatedAtAction("GetDay", new { id = day.DayID }, day);
+            return Ok();
         }
 
         // DELETE: api/Days/5

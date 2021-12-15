@@ -44,38 +44,47 @@ namespace MBSAPITest01.Controllers
 
             return user;
         }
-		[HttpGet("{id}/withnotes")]
-		public async Task<ActionResult<User>> GetUserWithNotes(int id)
-		{
-            //Dette går ikke da de to objekter henviser til hinanden ad infinitum... -_-
-            var user = await _context.Users.FindAsync(id);
-            var notesList = await _context.Notes
-                .Where(u => u.UserID == id)
-                .ToListAsync();
-            user.Notes = notesList;
 
-            return Ok(user);
-		}
+  //      [HttpGet("{id}/days")]
+  //      public async Task<ActionResult<IEnumerable<Day>>> GetUsersDays(int id)
+		//{
+  //          var daysList = await _context.Days.Where(d => d.User.UserID == id).ToListAsync();
+
+  //          return Ok(daysList);
+		//}
+
+		//[HttpGet("{id}/withnotes")]
+		//public async Task<ActionResult<User>> GetUserWithNotes(int id)
+		//{
+		//          //Dette går ikke da de to objekter henviser til hinanden ad infinitum... -_-
+		//          var user = await _context.Users.FindAsync(id);
+		//          var notesList = await _context.Notes
+		//              .Where(u => u.UserID == id)
+		//              .ToListAsync();
+		//          user.Notes = notesList;
+
+		//          return Ok(user);
+		//}
 
 		[HttpGet("{id}/days")]
-        public async Task<ActionResult<IEnumerable<Day>>> GetDaysByUserID(int id)
+		public async Task<ActionResult<Day>> GetDaysByUserID(int id)
 		{
 			var days = await _context.Days
-	            .Include(i => i.Influence)
-                //.Where(user => user.User.UserID == id)
-	            .Include(m => m.Mood)
-	            .Include(n => n.Note)
-                .Where(u => u.User.UserID == id)
-	            //.Include(u => u.User)
+				.Include(i => i.Influence)
+				//.Where(user => user.User.UserID == id)
+				.Include(m => m.Mood)
+				.Include(n => n.Note)
+				.Where(u => u.User.UserID == id)
+				//.Include(u => u.User)
 				.ToListAsync();
 
 			return Ok(days);
 		}
 
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
+		// PUT: api/Users/5
+		// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+		[HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
             if (id != user.UserID)

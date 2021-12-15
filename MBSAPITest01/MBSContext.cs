@@ -12,6 +12,8 @@ namespace MBS_API
     public class MBSContext : DbContext
     {
         //https://stackoverflow.com/questions/54596180/asp-net-core-web-api-ef-core-models-with-foreign-key-relationship
+        //https://entityframeworkcore.com/knowledge-base/54787102/ef-foreign-key-reference-using-id-vs-object
+        //https://entityframeworkcore.com/knowledge-base/54787102/ef-foreign-key-reference-using-id-vs-object
         public DbSet<Day> Days { get; set; }
         public DbSet<Influence> Influences { get; set; }
         public DbSet<Mood> Moods { get; set; }
@@ -51,6 +53,10 @@ namespace MBS_API
                 .HasIndex(u => u.UserEmail)
                 .IsUnique();
 
+            modelBuilder.Entity<Note>()
+                .HasIndex(n => n.DayID)
+                .IsUnique();
+
             //modelBuilder.Entity<Day>()
             //    .HasIndex(d => d.Note.NoteID)
             //    .IsUnique();
@@ -64,14 +70,22 @@ namespace MBS_API
             //    .WithOne(n => n.Note)
             //    .HasForeignKey<Day>(n => n.Note.NoteID);
 
-            modelBuilder.Entity<Day>()
-                .HasOne(n => n.Note)
-                .WithOne(d => d.Day)
-                .OnDelete(DeleteBehavior.ClientCascade);
+       //     modelBuilder.Entity<Day>()
+       //         .HasOne(n => n.Note)
+			    //.WithOne(d => d.Day);
+
+
+			//.HasOne(n => n.Note)
+			//.WithOne(d => d.DayID)
+			//.OnDelete(DeleteBehavior.ClientCascade);
+
+			//Hvordan laver jeg et 1-1 forhold mellem noter og dage uden at lave det der uendeligheds-løkke???
+			//modelBuilder.Entity<Day>()
+			//    .HasOne(N => N.Note)
+			//    .WithOne(d => d.DayID)
 
 			//modelBuilder.Entity<Note>()
-			//	.HasOne<Day>(d => d.Day)
-   //             .WithOne<Note>(n => n.)
+			//	.HasOne
 
 
 			base.OnModelCreating(modelBuilder);

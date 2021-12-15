@@ -4,14 +4,16 @@ using MBS_API;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace MBSAPITest01.Migrations
 {
     [DbContext(typeof(MBSContext))]
-    partial class MBSContextModelSnapshot : ModelSnapshot
+    [Migration("20211214095920_flereModelRettelser")]
+    partial class flereModelRettelser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,16 +31,13 @@ namespace MBSAPITest01.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<bool>("HasNote")
-                        .HasColumnType("bit");
-
-                    b.Property<int>("InfluenceID")
+                    b.Property<int?>("InfluenceID")
                         .HasColumnType("int");
 
-                    b.Property<int>("MoodID")
+                    b.Property<int?>("MoodID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserID")
+                    b.Property<int?>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("DayID");
@@ -94,9 +93,6 @@ namespace MBSAPITest01.Migrations
 
                     b.HasKey("DayID");
 
-                    b.HasIndex("DayID")
-                        .IsUnique();
-
                     b.ToTable("Notes");
                 });
 
@@ -127,21 +123,15 @@ namespace MBSAPITest01.Migrations
                 {
                     b.HasOne("MBStest01.Models.Influence", "Influence")
                         .WithMany()
-                        .HasForeignKey("InfluenceID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("InfluenceID");
 
                     b.HasOne("MBStest01.Models.Mood", "Mood")
                         .WithMany()
-                        .HasForeignKey("MoodID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("MoodID");
 
                     b.HasOne("MBStest01.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserID");
 
                     b.Navigation("Influence");
 

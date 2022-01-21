@@ -26,8 +26,8 @@ namespace MBSAPITest01.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Day>>> GetDays()
         {
-			return await _context.Days.ToListAsync();
-		}
+            return await _context.Days.ToListAsync();
+        }
 
         // GET: api/Days/5
         [HttpGet("{id}")]
@@ -43,7 +43,7 @@ namespace MBSAPITest01.Controllers
             return day;
         }
 
-        [HttpGet("withdata")]
+        [HttpGet("withdata/{id}")]
         public async Task<ActionResult> GetDaysWithData(int id)
 		{
             var days = await _context.Days
@@ -51,10 +51,13 @@ namespace MBSAPITest01.Controllers
                 .Include(m => m.Mood)
                 .Include(i => i.Influence)
 				.Include(n => n.Note)
+                .Where(u => u.UserID == id)
 				.ToListAsync();
 
             return Ok(days);
         }
+
+        //[HttpGet("byuseridwithdata")]
 
         // PUT: api/Days/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -92,16 +95,16 @@ namespace MBSAPITest01.Controllers
         [HttpPost]
         public async Task<ActionResult<Day>> PostDay(Day day)
         {
-            Day dayToPost = new Day();
-            dayToPost.Date = day.Date;
-            dayToPost.UserID = day.User.UserID;
-            dayToPost.MoodID = day.Mood.MoodID;
-            dayToPost.InfluenceID = day.Influence.InfluenceID;
-            if (day.Note != null)
-                dayToPost.HasNote = true;
-            dayToPost.Note = day.Note;
+            //Day dayToPost = new Day();
+            //dayToPost.Date = day.Date;
+            //dayToPost.UserID = day.User.UserID;
+            //dayToPost.MoodID = day.Mood.MoodID;
+            //dayToPost.InfluenceID = day.Influence.InfluenceID;
+            //if (day.Note != null)
+            //    dayToPost.HasNote = true;
+            //dayToPost.Note = day.Note;
 
-            _context.Days.Add(dayToPost);
+            _context.Days.Add(day);
             await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetDay", new { id = day.DayID }, day);

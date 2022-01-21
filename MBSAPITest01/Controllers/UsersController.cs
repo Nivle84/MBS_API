@@ -45,6 +45,17 @@ namespace MBSAPITest01.Controllers
             return user;
         }
 
+        [HttpGet("username/{username}")]
+        public async Task<ActionResult<User>> GetUserByName(string username)
+		{
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.UserEmail == username);
+
+            if (user == null)
+                return NotFound();
+
+            return user;
+		}
+
   //      [HttpGet("{id}/days")]
   //      public async Task<ActionResult<IEnumerable<Day>>> GetUsersDays(int id)
 		//{
@@ -74,7 +85,7 @@ namespace MBSAPITest01.Controllers
 				//.Where(user => user.User.UserID == id)
 				.Include(m => m.Mood)
 				.Include(n => n.Note)
-				.Where(u => u.User.UserID == id)
+				.Where(u => u.UserID == id)
 				//.Include(u => u.User)
 				.ToListAsync();
 

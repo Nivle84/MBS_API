@@ -70,6 +70,7 @@ namespace MBSAPITest01.Controllers
             }
 
             _context.Entry(day).State = EntityState.Modified;
+            _context.Entry(day.Note).State = EntityState.Modified;
 
             try
             {
@@ -93,7 +94,7 @@ namespace MBSAPITest01.Controllers
         // POST: api/Days
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Day>> PostDay(Day day)
+        public async Task<ActionResult<Day>> PostDay(Day receivedDay)
         {
             //Day dayToPost = new Day();
             //dayToPost.Date = day.Date;
@@ -103,8 +104,16 @@ namespace MBSAPITest01.Controllers
             //if (day.Note != null)
             //    dayToPost.HasNote = true;
             //dayToPost.Note = day.Note;
+   //         if (receivedDay.DayID != 0)
+			//{
+   //             var day = (Day) await _context.Days.FirstOrDefaultAsync(d => d.DayID == receivedDay.DayID);
+   //             day.MoodID = receivedDay.MoodID;
+   //             day.InfluenceID = receivedDay.InfluenceID;
+   //             //day.
+			//}
 
-            _context.Days.Add(day);
+
+            _context.Days.Add(receivedDay);
             await _context.SaveChangesAsync();
 
             //return CreatedAtAction("GetDay", new { id = day.DayID }, day);

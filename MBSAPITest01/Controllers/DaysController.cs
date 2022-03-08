@@ -9,6 +9,8 @@ using MBS_API;
 using MBStest01.Models;
 using Newtonsoft.Json;
 using System.Net.Http;
+using SplashScreenTest02.Models;
+using System.Collections.ObjectModel;
 
 namespace MBSAPITest01.Controllers
 {
@@ -54,8 +56,55 @@ namespace MBSAPITest01.Controllers
                 .Where(u => u.UserID == id)
 				.ToListAsync();
 
-            return Ok(days);
+            if (days.Count > 0)
+                return Ok(days);
+			else
+                return NotFound();
         }
+
+        [HttpGet("usergraphdays/{userid}")]
+        public async Task<ActionResult> GetUserGraphDays(int userid)
+		{
+            var days = await _context.Days
+                .Where(u => u.UserID == userid)
+                .OrderByDescending(d => d.Date)
+                .ToListAsync();
+
+			ObservableCollection<GraphDay> graphDays = new ObservableCollection<GraphDay>();
+
+			if (days.Count >= 30)
+            {
+                for (int i = 0; i < 30; i++)
+                {
+                    graphDays.Add(
+                        new GraphDay
+                        {
+                            MoodID = days[i].MoodID,
+                            InfluenceID = days[i].InfluenceID,
+                            Date = days[i].Date
+                        });
+                }
+            }
+            else if (days.Count >= 7)
+            {
+                for (int i = 0; i < 7; i++)
+                {
+                    graphDays.Add(
+                        new GraphDay
+                        {
+                            MoodID = days[i].MoodID,
+                            InfluenceID = days[i].InfluenceID,
+                            Date = days[i].Date
+                        });
+                }
+            }
+
+            if (graphDays.Count > 0)
+                return Ok(graphDays);
+            else
+                return NotFound();
+		}
+
 
         //[HttpGet("byuseridwithdata")]
 
@@ -116,8 +165,8 @@ namespace MBSAPITest01.Controllers
             _context.Days.Add(receivedDay);
             await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetDay", new { id = day.DayID }, day);
-            return Ok();
+			return CreatedAtAction("GetDay", new { id = receivedDay.DayID }, receivedDay);
+			//return Ok();
         }
 
         // DELETE: api/Days/5

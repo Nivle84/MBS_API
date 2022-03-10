@@ -70,40 +70,76 @@ namespace MBSAPITest01.Controllers
                 .OrderByDescending(d => d.Date)
                 .ToListAsync();
 
-			ObservableCollection<GraphDay> graphDays = new ObservableCollection<GraphDay>();
+			//ObservableCollection<GraphDay> graphDays = new ObservableCollection<GraphDay>();
+            List<GraphDay> graphDays = new List<GraphDay>();
 
+			//Task stripDaysTask = Task.Run(async () => graphDays = await StripDays(days));
 			if (days.Count >= 30)
-            {
-                for (int i = 0; i < 30; i++)
-                {
-                    graphDays.Add(
-                        new GraphDay
-                        {
-                            MoodID = days[i].MoodID,
-                            InfluenceID = days[i].InfluenceID,
-                            Date = days[i].Date
-                        });
-                }
-            }
-            else if (days.Count >= 7)
-            {
-                for (int i = 0; i < 7; i++)
-                {
-                    graphDays.Add(
-                        new GraphDay
-                        {
-                            MoodID = days[i].MoodID,
-                            InfluenceID = days[i].InfluenceID,
-                            Date = days[i].Date
-                        });
-                }
-            }
+			{
+				for (int i = 0; i < 30; i++)
+				{
+					graphDays.Add(
+						new GraphDay
+						{
+							MoodID = days[i].MoodID,
+							InfluenceID = days[i].InfluenceID,
+							Date = days[i].Date
+						});
+				}
+			}
+			else if (days.Count >= 7)
+			{
+				for (int i = 0; i < 7; i++)
+				{
+					graphDays.Add(
+						new GraphDay
+						{
+							MoodID = days[i].MoodID,
+							InfluenceID = days[i].InfluenceID,
+							Date = days[i].Date
+						});
+				}
+			}
 
-            if (graphDays.Count > 0)
+			if (graphDays.Count > 0)
                 return Ok(graphDays);
             else
                 return NotFound();
 		}
+
+  //      public async Task<List<GraphDay>> StripDays(List<Day> days)
+		//{
+  //          List<GraphDay> graphDays = new List<GraphDay>();
+
+  //          if (days.Count >= 30)
+  //          {
+  //              for (int i = 0; i < 30; i++)
+  //              {
+  //                  graphDays.Add(
+  //                      new GraphDay
+  //                      {
+  //                          MoodID = days[i].MoodID,
+  //                          InfluenceID = days[i].InfluenceID,
+  //                          Date = days[i].Date
+  //                      });
+  //              }
+  //          }
+  //          else if (days.Count >= 7)
+  //          {
+  //              for (int i = 0; i < 7; i++)
+  //              {
+  //                  graphDays.Add(
+  //                      new GraphDay
+  //                      {
+  //                          MoodID = days[i].MoodID,
+  //                          InfluenceID = days[i].InfluenceID,
+  //                          Date = days[i].Date
+  //                      });
+  //              }
+  //          }
+
+  //          return graphDays;
+  //      }
 
 
         //[HttpGet("byuseridwithdata")]

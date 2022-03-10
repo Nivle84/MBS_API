@@ -4,7 +4,7 @@ using System.Text;
 
 namespace SplashScreenTest02.Models
 {
-	internal class GraphDay
+	public class GraphDay
 	{
 		public int MoodID { get; set; }
 		public int InfluenceID { get; set; }

@@ -101,6 +101,8 @@ namespace MBSAPITest01.Controllers
 				}
 			}
 
+            graphDays.OrderBy(d => d.Date).ToList();
+
 			if (graphDays.Count > 0)
                 return Ok(graphDays);
             else
@@ -204,6 +206,15 @@ namespace MBSAPITest01.Controllers
 			return CreatedAtAction("GetDay", new { id = receivedDay.DayID }, receivedDay);
 			//return Ok();
         }
+
+        [HttpPost("postmultiple")]
+        public async Task<ActionResult<List<Day>>> PostDayList(List<Day> receivedDayList)
+		{
+            _context.AddRange(receivedDayList);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+		}
 
         // DELETE: api/Days/5
         [HttpDelete("{id}")]
